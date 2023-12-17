@@ -10,7 +10,6 @@ defmodule Keycloak.Plug.VerifyToken do
       # In your plug pipeline
       plug Keycloak.Plug.VerifyToken
   """
-  use Joken.Config
 
   import Plug.Conn
 
@@ -46,8 +45,7 @@ defmodule Keycloak.Plug.VerifyToken do
     end
   end
 
-  # 1 hour
-  def token_config(), do: default_claims(default_exp: 60 * 60)
+  def token_config(), do: Joken.Config.default_claims(skip: [:iss, :aud])
 
   @doc """
   Attemps to verify that the passed `token` can be trusted.
@@ -64,7 +62,7 @@ defmodule Keycloak.Plug.VerifyToken do
   def verify_token(nil), do: {:error, :not_authenticated}
 
   def verify_token(token) do
-    verify_and_validate(token, signer_key())
+    Joken.verify_and_validate(token_config(), token, signer_key())
   end
 
   @doc """
@@ -117,9 +115,7 @@ defmodule Keycloak.Plug.VerifyToken do
         |> (&Joken.Signer.create("HS512", &1)).()
 
       [public_key: public_key] ->
-        public_key
-        |> JWK.from_pem()
-        |> (&Joken.Signer.create("RS256", &1)).()
+        Joken.Signer.create("RS256", %{"pem"=> public_key})
 
       _ ->
         raise "No signer configuration present for #{__MODULE__}"
