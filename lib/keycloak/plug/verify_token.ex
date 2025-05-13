@@ -40,7 +40,7 @@ defmodule Keycloak.Plug.VerifyToken do
       {:error, message} ->
         conn
         |> put_resp_content_type("application/vnd.api+json")
-        |> send_resp(401, Poison.encode!(%{error: message}))
+        |> send_resp(401, "unauthorized")
         |> halt()
     end
   end
@@ -115,7 +115,7 @@ defmodule Keycloak.Plug.VerifyToken do
         |> (&Joken.Signer.create("HS512", &1)).()
 
       [public_key: public_key] ->
-        Joken.Signer.create("RS256", %{"pem"=> public_key})
+        Joken.Signer.create("RS256", %{"pem" => public_key})
 
       _ ->
         raise "No signer configuration present for #{__MODULE__}"

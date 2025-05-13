@@ -4,14 +4,14 @@ defmodule Keycloak.Mixfile do
   def project do
     [
       app: :keycloak,
-      version: "1.1.0",
+      version: "1.1.1",
       elixir: "~> 1.6",
       name: "keycloak",
       description: "Library for interacting with a Keycloak authorization server",
       package: package(),
       deps: deps(),
       docs: [extras: ["README.md"], main: "readme"],
-      source_url: "https://github.com/vanetix/elixir-keycloak"
+      source_url: "https://github.com/dictatelife/elixir-keycloak"
     ]
   end
 
@@ -34,9 +34,9 @@ defmodule Keycloak.Mixfile do
 
   defp package do
     [
-      maintainers: ["Matthew McFarland"],
+      maintainers: ["Dictate.life"],
       licenses: ["MIT"],
-      links: %{"Github" => "https://github.com/vanetix/elixir-keycloak"}
+      links: %{"Github" => "https://github.com/dictatelife/elixir-keycloak"}
     ]
   end
 end
